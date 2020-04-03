@@ -4,10 +4,10 @@ services:
   - docker
   
 before_install:
-  - docker build -t hazhang/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t hazhang/multi-docker -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true hazhang/react-test npm run test
+  - docker run -e CI=true hazhang/multi-docker npm run test
   
 after_success:
   - docker build -t hazhang/multi-client ./client
