@@ -6,7 +6,7 @@ before_install:
   - docker build -t hazhang/multi-docker -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true hazhang/multi-docker npm run test
+  - docker run hazhang/multi-docker npm run test -- --coverage
   
 after_success:
   - docker build -t hazhang/multi-client ./client
