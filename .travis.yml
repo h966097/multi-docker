@@ -1,0 +1,23 @@
+language: generic
+sudo: required
+services:
+  - docker
+  
+before_install:
+  - docker build -t hazhang/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true hazhang/react-test npm run test
+  
+after_success:
+  - docker build -t hazhang/multi-client ./client
+  - docker build -t hazhang/multi-nginx ./nginx
+  - docker build -t hazhang/multi-server ./server
+  - docker build -t hazhang/multi-worker ./worker
+  # Log in to the docker CLI
+  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push hazhang/multi-client
+  - docker push hazhang/multi-nginx
+  - docker push hazhang/multi-server
+  - docker push hazhang/multi-worker
